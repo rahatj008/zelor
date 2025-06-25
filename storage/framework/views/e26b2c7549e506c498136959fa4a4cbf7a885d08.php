@@ -1,0 +1,141 @@
+
+<?php $__env->startSection('content'); ?>
+   <?php
+     $promo_banner = frontend_section('promotional-offer');
+   ?>
+
+<div class="breadcrumb-banner">
+    <div class="breadcrumb-banner-img">
+        <img src="<?php echo e(show_image(file_path()['frontend']['path'].'/'.@frontend_section_data($breadcrumb->value,'image'),@frontend_section_data($breadcrumb->value,'image','size'))); ?>" alt="breadcrumb.jpg">
+    </div>
+    <div class="page-Breadcrumb">
+        <div class="Container">
+            <div class="breadcrumb-container">
+                <h1 class="breadcrumb-title">All order list</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="<?php echo e(url('/')); ?>">
+                            <?php echo e(translate('home')); ?>
+
+                        </a></li>
+
+                        <li class="breadcrumb-item active" aria-current="page">
+                            All order list
+                        </li>
+
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="pb-80">
+    <div class="Container">
+        <div class="row g-4">
+            <?php echo $__env->make('user.partials.dashboard_sidebar', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+
+            <div class="col-xl-9 col-lg-8">
+                <div class="profile-user-right">
+                    <a href="<?php echo e(@frontend_section_data($promo_banner->value,'image','url')); ?>" class="d-block">
+                        <img class="w-100" src="<?php echo e(show_image(file_path()['frontend']['path'].'/'.@frontend_section_data($promo_banner->value,'image'),@frontend_section_data($promo_banner->value,'image','size'))); ?>" alt="banner.jpg">
+                    </a>
+
+                    <div class="card mt-5">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <h4 class="card-title">
+                                                <?php echo e(translate('Orders')); ?>
+
+                                        </h4>
+                                    </div>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-nowrap align-middle">
+                                    <thead class="table-light">
+                                        <tr class="text-muted fs-14">
+                                            <th scope="col" class="text-start"><?php echo e(translate('Order Number')); ?></th>
+                                            <th scope="col" class="text-start"><?php echo e(translate('Place On')); ?></th>
+                                            <th scope="col" class="text-center"><?php echo e(translate('Payment Status')); ?></th>
+                                            <th scope="col" class="text-center"><?php echo e(translate('Total Price')); ?></th>
+                                            <th scope="col" class="text-end"><?php echo e(translate('Action')); ?></th>
+                                            </tr>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody class="border-bottom-0">
+                                        <?php $__empty_1 = true; $__currentLoopData = $digtal_orders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $order): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                            <tr class="fs-14 tr-item">
+                                                <td class="text-start">
+                                                    <a href="<?php echo e(route('user.digital.order.details', $order->order_id)); ?>"    class="badge-soft-primary py-1 px-2"><?php echo e($order->order_id); ?>
+
+                                                    </a>
+                                                </td>
+
+                                                <td class="text-start">
+                                                    <?php echo e(get_date_time($order->created_at)); ?>
+
+                                                </td>
+
+                                                <td class="text-center">
+                                                    <?php if($order->payment_status == 2): ?>
+                                                        <span  class="badge badge-soft-success"><?php echo e(translate('Paid')); ?></span>
+                                                    <?php elseif($order->payment_status == 1): ?>
+                                                        <span class="badge badge-soft-danger" ><?php echo e(translate('Unpaid')); ?></span>
+                                                    <?php endif; ?>
+                                                </td>
+
+                                                <td class="text-center">
+                                                    <?php echo e(short_amount($order->amount)); ?>
+
+                                                </td>
+
+                                                <td class="text-end">
+                                                    <div class="d-flex align-items-center gap-3 justify-content-end">
+                                                        <?php if($order->payment_status == '1' && $order->status != '6'): ?>
+                                                            <a href="javascript:void(0)" class="order--cancel badge badge-soft-danger fs-12 pointer" data-bs-toggle="modal" data-bs-target="#deleteOrder" data-id="<?php echo e($order->id); ?>">
+                                                            <i class="fa-solid fa-trash"></i></a>
+                                                        <?php endif; ?>
+
+                                                        <a href="<?php echo e(route('user.digital.order.details', $order->order_id)); ?>"    class="badge badge-soft-info fs-12 pointer"><i class="fa-regular fa-eye"></i>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                                            <tr >
+                                                <td class="text-center text-muted py-5" colspan="5"><p><?php echo e(translate('No Data Found')); ?></p></td>
+                                            </tr>
+                                        <?php endif; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="mt-4 d-flex align-items-center justify-content-end">
+                                    <?php echo e($digtal_orders->links()); ?>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<?php $__env->stopSection(); ?>
+
+
+
+
+<?php echo $__env->make('frontend.layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /home/u935716083/domains/testlinkdesigns.com/public_html/zelor/resources/views/user/digtal_order.blade.php ENDPATH**/ ?>
