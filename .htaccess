@@ -1,68 +1,12 @@
 <IfModule mod_rewrite.c>
-    <IfModule mod_negotiation.c>
-        Options -MultiViews -Indexes
-    </IfModule>
-
     RewriteEngine On
 
-    # Handle Authorization Header
-    RewriteCond %{HTTP:Authorization} .
-    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+    # Force HTTPS (Heroku-specific)
+    RewriteCond %{HTTP:X-Forwarded-Proto} !https
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-    # Redirect Trailing Slashes If Not A Folder...
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_URI} (.+)/$
-    RewriteRule ^ %1 [L,R=301]
-
-    # Send Requests To Front Controller...
+    # Standard Laravel rewrites below...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
-
-<Files .env>
-    Order allow,deny
-    Deny from all
-</Files>
-
-# <IfModule mod_rewrite.c>
-#     <IfModule mod_negotiation.c>
-#         Options -MultiViews -Indexes
-#     </IfModule>
-
-#     RewriteEngine On
-
-#     # Ensure Authorization header is passed correctly
-#     RewriteCond %{HTTP:Authorization} .
-#     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
-
-#     # Redirect Trailing Slashes If Not A Folder...
-#     RewriteCond %{REQUEST_FILENAME} !-d
-#     RewriteCond %{REQUEST_URI} (.+)/$
-#     RewriteRule ^ %1 [L,R=301]
-
-#     # Block specific unwanted methods (optional for security)
-#     RewriteCond %{REQUEST_METHOD} ^(TRACE|TRACK) [NC]
-#     RewriteRule .* - [F]
-
-#     # Send Requests To Front Controller...
-#     RewriteCond %{REQUEST_FILENAME} !-d
-#     RewriteCond %{REQUEST_FILENAME} !-f
-#     RewriteRule ^ index.php [L]
-
-#     # Ensure all methods (GET, POST, PUT, PATCH, DELETE) are allowed through
-#     <LimitExcept GET POST PUT PATCH DELETE OPTIONS HEAD>
-#         Require all granted
-#     </LimitExcept>
-    
-# </IfModule>
-
-# Block access to .env and other sensitive files
-# <FilesMatch "^\.env|^\.git|^\.htaccess|^composer\.(json|lock)|^artisan|^server\.php|^phpunit\.xml$">
-#     Order allow,deny
-#     Deny from all
-# </FilesMatch>
-
-# php -- BEGIN cPanel-generated handler, do not edit
-# This domain inherits the “PHP” package.
-# php -- END cPanel-generated handler, do not edit
